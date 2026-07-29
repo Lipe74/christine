@@ -1,15 +1,15 @@
 {
-  "name": "NOM_CLIENT",
-  "short_name": "NOM_CLIENT",
-  "description": "DESCRIPTION_CLIENT",
+  "name": "Le Sans Gluten de Christine",
+  "short_name": "Sans Gluten Christine",
+  "description": "Pains, pâtisseries et produits sans gluten faits maison. Commandez en ligne, livraison en Belgique.",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "theme_color": "#d97a3f",
   "orientation": "portrait",
   "lang": "fr",
-  "id": "nom-client-site",
+  "id": "le-sans-gluten-de-christine",
   "icons": [
     {
       "src": "images/logo.png",

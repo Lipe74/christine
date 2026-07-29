@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique – Le Sans Gluten de Christine</title>
+<meta name="description" content="Commandez en ligne les pains, pâtisseries et produits sans gluten de Christine. Livraison en Belgique.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#d97a3f">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="images/logo.png">
+
+<style>
+:root {
+  --color-main: #d97a3f;
+  --color-dark: #a85423;
+  --color-light: #fbf0e6;
+  --color-border: #f0d5bc;
+
+  --dark: #0f172a;
+  --muted: #64748b;
+  --white: #ffffff;
+  --bg: #f8fafc;
+  --green: #25d366;
+  --radius: 16px;
+  --max: 1100px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--dark); overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 999; background: var(--white); border-bottom: 3px solid var(--color-main); box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+.nav-inner { max-width: var(--max); margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+.nav-logo span { font-size: 18px; font-weight: 900; color: var(--color-main); }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-links a { font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--color-main); background: var(--color-light); }
+.cart-btn { position: relative; background: var(--color-main); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.cart-btn:hover { background: var(--color-dark); }
+.cart-badge { position: absolute; top: -6px; right: -6px; background: var(--dark); color: white; font-size: 11px; font-weight: 800; width: 20px; height: 20px; border-radius: 50%; display: none; align-items: center; justify-content: center; }
+@media (max-width: 640px) { .nav-links a:not(.cart-btn) { display: none; } }
+
+/* HEADER BOUTIQUE */
+.shop-header { background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-main) 100%); padding: 44px 20px; text-align: center; }
+.shop-header h1 { color: white; font-size: 30px; font-weight: 900; margin-bottom: 8px; }
+.shop-header p { color: rgba(255,255,255,0.85); font-size: 14px; max-width: 480px; margin: 0 auto; }
+
+/* FILTERS */
+.filters { max-width: var(--max); margin: 24px auto 0; padding: 0 20px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.filter-pill { border: 1.5px solid var(--color-border); background: var(--white); color: var(--dark); font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; }
+.filter-pill:hover { border-color: var(--color-main); }
+.filter-pill.active { background: var(--color-main); color: white; border-color: var(--color-main); }
+
+/* GRID */
+.shop-grid { max-width: var(--max); margin: 0 auto; padding: 28px 20px 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.product-card { background: var(--white); border: 1.5px solid var(--color-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+.product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--color-light); }
+.product-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.product-cat { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--color-dark); }
+.product-name { font-size: 16px; font-weight: 800; color: var(--dark); line-height: 1.3; }
+.product-desc { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; }
+.product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+.product-price { font-size: 18px; font-weight: 900; color: var(--color-main); }
+.stock-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+.stock-badge.in { background: #dcfce7; color: #166534; }
+.stock-badge.out { background: #fee2e2; color: #991b1b; }
+.btn-add { width: 100%; padding: 11px; background: var(--color-main); color: white; border: none; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.2s; }
+.btn-add:hover { background: var(--color-dark); }
+.btn-add:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+/* CART DRAWER */
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+.cart-overlay.open { opacity: 1; pointer-events: auto; }
+.cart-drawer { position: fixed; top: 0; right: -420px; width: 100%; max-width: 420px; height: 100%; background: var(--white); z-index: 1001; box-shadow: -8px 0 40px rgba(0,0,0,0.15); transition: right 0.3s; display: flex; flex-direction: column; }
+.cart-drawer.open { right: 0; }
+.cart-drawer-header { padding: 20px; border-bottom: 1.5px solid var(--color-border); display: flex; align-items: center; justify-content: space-between; }
+.cart-drawer-header h2 { font-size: 18px; font-weight: 900; }
+.cart-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); }
+.cart-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+#cart-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 0; }
+.cart-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--color-border); }
+.cart-row-img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; background: var(--color-light); flex-shrink: 0; }
+.cart-row-info { flex: 1; }
+.cart-row-name { font-size: 13px; font-weight: 700; }
+.cart-row-price { font-size: 12px; color: var(--color-main); font-weight: 700; margin: 2px 0; }
+.cart-row-qty { display: flex; align-items: center; gap: 8px; }
+.cart-row-qty button { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--color-border); background: var(--white); cursor: pointer; font-weight: 800; }
+.cart-row-qty span { font-size: 13px; font-weight: 700; min-width: 16px; text-align: center; }
+.cart-row-remove { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; }
+#cart-shipping-notice { display: none; font-size: 12px; background: var(--color-light); color: var(--color-dark); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; font-weight: 700; text-align: center; }
+.cart-summary { padding: 16px 20px; border-top: 1.5px solid var(--color-border); }
+.cart-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.cart-summary-row.total { font-size: 16px; font-weight: 900; color: var(--dark); margin-top: 8px; }
+.btn-checkout { width: 100%; margin-top: 14px; padding: 14px; background: var(--color-main); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; }
+.btn-checkout:hover { background: var(--color-dark); }
+
+/* FOOTER */
+footer { background: var(--color-light); border-top: 2px solid var(--color-border); padding: 32px 20px; text-align: center; }
+.footer-copy { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="images/logo.png" alt="Le Sans Gluten de Christine">
+      <span>Le Sans Gluten de Christine</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="boutique.html" class="active">Boutique</a>
+      <a href="index.html#contact">Contact</a>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Panier <span id="cart-badge" class="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="shop-header">
+  <h1>Notre boutique</h1>
+  <p>Pains, pâtisseries et produits sans gluten, préparés avec soin. Livraison gratuite dès 60 € d'achat.</p>
+</div>
+
+<!-- FILTERS -->
+<div class="filters" id="filters"></div>
+
+<!-- PRODUCT GRID -->
+<div class="shop-grid" id="shop-grid"></div>
+
+<!-- CART -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h2>🛒 Mon panier</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body">
+    <div id="cart-shipping-notice"></div>
+    <div id="cart-empty">Votre panier est vide.</div>
+    <div id="cart-items"></div>
+  </div>
+  <div class="cart-summary" id="cart-summary" style="display:none;">
+    <div class="cart-summary-row"><span>Sous-total</span><span id="cart-subtotal">0,00 €</span></div>
+    <div class="cart-summary-row"><span>Livraison</span><span id="cart-shipping">0,00 €</span></div>
+    <div class="cart-summary-row total"><span>Total</span><span id="cart-total">0,00 €</span></div>
+    <button class="btn-checkout" onclick="goToCheckout()">Passer la commande</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2026 Le Sans Gluten de Christine · Tous droits réservés</div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script>
+let ALL_PRODUCTS = [];
+let ACTIVE_CATEGORY = "Tous";
+
+async function loadProducts() {
+  const res = await fetch("data/products.json");
+  ALL_PRODUCTS = await res.json();
+  renderFilters();
+  renderProducts();
+}
+
+function renderFilters() {
+  const categories = ["Tous", ...new Set(ALL_PRODUCTS.map(p => p.category))];
+  const container = document.getElementById("filters");
+  container.innerHTML = categories.map(cat =>
+    `<button class="filter-pill ${cat === ACTIVE_CATEGORY ? 'active' : ''}" onclick="setCategory('${cat}')">${cat}</button>`
+  ).join("");
+}
+
+function setCategory(cat) {
+  ACTIVE_CATEGORY = cat;
+  renderFilters();
+  renderProducts();
+}
+
+function renderProducts() {
+  const grid = document.getElementById("shop-grid");
+  const list = ACTIVE_CATEGORY === "Tous" ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p => p.category === ACTIVE_CATEGORY);
+
+  grid.innerHTML = list.map(p => `
+    <div class="product-card">
+      <img class="product-img" src="${p.image}" alt="${p.name}" onerror="this.src='images/placeholder-product.svg'">
+      <div class="product-body">
+        <span class="product-cat">${p.category}</span>
+        <div class="product-name">${p.name}</div>
+        <p class="product-desc">${p.description}</p>
+        <div class="product-footer">
+          <span class="product-price">${p.price.toFixed(2)} €</span>
+          <span class="stock-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'En stock' : 'Rupture de stock'}</span>
+        </div>
+        <button class="btn-add" ${p.stock ? '' : 'disabled'} onclick='addToCart(${JSON.stringify(p)})'>
+          ${p.stock ? '🛒 Ajouter au panier' : 'Indisponible'}
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+loadProducts();
+</script>
+</body>
+</html>
