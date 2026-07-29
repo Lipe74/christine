@@ -230,7 +230,7 @@ function renderProducts() {
           <span class="product-price">${p.price.toFixed(2)} €</span>
           <span class="stock-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'En stock' : 'Rupture de stock'}</span>
         </div>
-        <button class="btn-add" ${p.stock ? '' : 'disabled'} onclick='addToCart(${JSON.stringify(p)})'>
+        <button class="btn-add" ${p.stock ? '' : 'disabled'} onclick="addToCartById(${p.id})">
           ${p.stock ? '🛒 Ajouter au panier' : 'Indisponible'}
         </button>
       </div>
@@ -243,6 +243,11 @@ function toggleDesc(id) {
   const btn = document.getElementById(`toggle-${id}`);
   desc.classList.toggle('expanded');
   btn.textContent = desc.classList.contains('expanded') ? 'Voir moins' : 'Lire la suite';
+}
+
+function addToCartById(id) {
+  const product = ALL_PRODUCTS.find(p => p.id === id);
+  if (product) addToCart(product);
 }
 
 loadProducts();
