@@ -104,6 +104,12 @@ nav { position: sticky; top: 0; z-index: 999; background: var(--white); border-b
 .cart-summary-row.total { font-size: 16px; font-weight: 900; color: var(--dark); margin-top: 8px; }
 .btn-checkout { width: 100%; margin-top: 14px; padding: 14px; background: var(--color-main); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; }
 .btn-checkout:hover { background: var(--color-dark); }
+.address-form { padding: 16px 20px 0; border-top: 1.5px solid var(--color-border); }
+.address-form h3 { font-size: 13px; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+.address-form .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.address-form input, .address-form select { width: 100%; padding: 9px 10px; border: 1.5px solid var(--color-border); border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 13px; background: var(--bg); color: var(--dark); outline: none; margin-bottom: 8px; }
+.address-form input:focus, .address-form select:focus { border-color: var(--color-main); background: white; }
+.address-error { display: none; font-size: 12px; color: #991b1b; background: #fee2e2; padding: 8px 10px; border-radius: 8px; margin-top: 6px; }
 
 /* FOOTER */
 footer { background: var(--color-light); border-top: 2px solid var(--color-border); padding: 32px 20px; text-align: center; }
@@ -153,6 +159,21 @@ footer { background: var(--color-light); border-top: 2px solid var(--color-borde
     <div id="cart-shipping-notice"></div>
     <div id="cart-empty">Votre panier est vide.</div>
     <div id="cart-items"></div>
+  </div>
+  <div class="address-form" id="address-form" style="display:none;">
+    <h3>📦 Adresse de livraison</h3>
+    <input type="text" id="addr-name" placeholder="Nom et prénom" required>
+    <input type="email" id="addr-email" placeholder="Email" required>
+    <input type="text" id="addr-street" placeholder="Rue et numéro" required>
+    <div class="form-row-2">
+      <input type="text" id="addr-postal" placeholder="Code postal" required>
+      <input type="text" id="addr-city" placeholder="Ville" required>
+    </div>
+    <select id="addr-country">
+      <option value="Belgique">Belgique</option>
+      <option value="France">France</option>
+    </select>
+    <div class="address-error" id="address-error">Merci de remplir tous les champs.</div>
   </div>
   <div class="cart-summary" id="cart-summary" style="display:none;">
     <div class="cart-summary-row"><span>Sous-total</span><span id="cart-subtotal">0,00 €</span></div>

@@ -77,6 +77,7 @@ function renderCart() {
   const list = document.getElementById("cart-items");
   const emptyMsg = document.getElementById("cart-empty");
   const summary = document.getElementById("cart-summary");
+  const addressForm = document.getElementById("address-form");
   if (!list) return;
 
   const cart = getCart();
@@ -85,10 +86,15 @@ function renderCart() {
   if (cart.length === 0) {
     if (emptyMsg) emptyMsg.style.display = "block";
     if (summary) summary.style.display = "none";
+    if (addressForm) addressForm.style.display = "none";
     return;
   }
   if (emptyMsg) emptyMsg.style.display = "none";
   if (summary) summary.style.display = "block";
+  if (addressForm) {
+    addressForm.style.display = "block";
+    loadAddressForm();
+  }
 
   cart.forEach(item => {
     const row = document.createElement("div");
@@ -144,13 +150,74 @@ function closeCart() {
   if (overlay) overlay.classList.remove("open");
 }
 
+const ADDRESS_KEY = "lsgc_address";
+
+function getAddress() {
+  try {
+    return JSON.parse(localStorage.getItem(ADDRESS_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveAddressToStorage(address) {
+  localStorage.setItem(ADDRESS_KEY, JSON.stringify(address));
+}
+
+function loadAddressForm() {
+  const addr = getAddress();
+  const nameEl = document.getElementById("addr-name");
+  if (!nameEl) return;
+  nameEl.value = addr.name || "";
+  document.getElementById("addr-email").value = addr.email || "";
+  document.getElementById("addr-street").value = addr.street || "";
+  document.getElementById("addr-postal").value = addr.postal || "";
+  document.getElementById("addr-city").value = addr.city || "";
+  document.getElementById("addr-country").value = addr.country || "Belgique";
+}
+
+function readAddressForm() {
+  return {
+    name: document.getElementById("addr-name").value.trim(),
+    email: document.getElementById("addr-email").value.trim(),
+    street: document.getElementById("addr-street").value.trim(),
+    postal: document.getElementById("addr-postal").value.trim(),
+    city: document.getElementById("addr-city").value.trim(),
+    country: document.getElementById("addr-country").value,
+  };
+}
+
+function isAddressComplete(addr) {
+  return addr.name && addr.email && addr.street && addr.postal && addr.city && addr.country;
+}
+
+
 function goToCheckout() {
   const cart = getCart();
   if (cart.length === 0) return;
+
+  const address = readAddressForm();
+  const errorBox = document.getElementById("address-error");
+
+  if (!isAddressComplete(address)) {
+    if (errorBox) errorBox.style.display = "block";
+    document.getElementById("address-form").scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  if (errorBox) errorBox.style.display = "none";
+  saveAddressToStorage(address);
+
   // ⚠️ Intégration Mollie à venir : nécessite une fonction serverless
   // pour créer la session de paiement de façon sécurisée (clé API secrète
   // côté serveur, jamais exposée côté client).
-  alert("Le paiement en ligne (Mollie) sera activé dès réception de la clé API de Christine. Panier prêt : " + cartCount(cart) + " article(s), total " + (cartSubtotal(cart) + shippingCost(cartSubtotal(cart))).toFixed(2) + " €.");
+  const subtotal = cartSubtotal(cart);
+  const total = subtotal + shippingCost(subtotal);
+  alert(
+    "Commande prête (paiement Mollie à venir) :\n\n" +
+    cartCount(cart) + " article(s) — Total : " + total.toFixed(2) + " €\n\n" +
+    "Livraison à :\n" + address.name + "\n" + address.street + "\n" +
+    address.postal + " " + address.city + ", " + address.country
+  );
 }
 
 document.addEventListener("DOMContentLoaded", () => {
