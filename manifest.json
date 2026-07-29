@@ -1,7 +1,7 @@
 {
   "name": "Le Sans Gluten de Christine",
   "short_name": "Sans Gluten Christine",
-  "description": "Cookies, sablés et biscuits sans gluten faits maison. Commandez en ligne, livraison en France.",
+  "description": "Cookies, sablés et biscuits sans gluten faits maison. Commandez en ligne, livraison en Belgique et en France.",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
