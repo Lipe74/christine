@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Cookies au chocolat sans gluten",
+    "category": "Cookies & Sablés",
+    "description": "Cookies artisanaux au chocolat, texture fondante et éclats de chocolat gourmands. Vendus par 4.",
+    "ingredients": "Farine sans gluten, sucres, beurre, œufs bio, chocolat, levure sans gluten",
+    "price": 5.0,
+    "image": "images/products/cookies-chocolat.jpg",
+    "stock": true
+  },
+  {
+    "id": 2,
+    "name": "Sablés coco sans gluten",
+    "category": "Cookies & Sablés",
+    "description": "Petits biscuits fondants au bon goût de noix de coco, texture friable et gourmande. Vendus par 4.",
+    "ingredients": "Farine sans gluten, sucre non raffiné, beurre, œufs bio, coco râpé, levure sans gluten",
+    "price": 5.0,
+    "image": "images/products/sables-coco.jpg",
+    "stock": true
+  },
+  {
+    "id": 3,
+    "name": "Cœurs de noisette sans gluten",
+    "category": "Cookies & Sablés",
+    "description": "Biscuits généreux aux noisettes torréfiées, croustillants et fondants à la fois. Vendus par 6.",
+    "ingredients": "Farine sans gluten, sucre non raffiné, œufs bio, poudre de noisettes",
+    "price": 5.0,
+    "image": "images/products/coeurs-noisette.jpg",
+    "stock": true
+  },
+  {
+    "id": 4,
+    "name": "Sablés cacahuète sans gluten",
+    "category": "Cookies & Sablés",
+    "description": "Sablés à la texture intensément friable, équilibre sucré-salé et cacahuète gourmande. Vendus par 4.",
+    "ingredients": "Farine sans gluten, sucres, beurre, œufs bio, cacahuètes, sel",
+    "price": 5.0,
+    "image": "images/products/sables-cacahuete.jpg",
+    "stock": true
+  },
+  {
+    "id": 5,
+    "name": "Spéculoos sans gluten",
+    "category": "Biscuits traditionnels",
+    "description": "Biscuits ambrés aux épices, sans cannelle, préparés au lait d'amandes. Vendus par 3.",
+    "ingredients": "Farine sans gluten, sucre, beurre, œufs bio, amandes, épices, lait d'amandes, miel",
+    "price": 5.0,
+    "image": "images/products/speculoos.jpg",
+    "stock": true
+  },
+  {
+    "id": 6,
+    "name": "Massepains cuits sans gluten",
+    "category": "Biscuits traditionnels",
+    "description": "Petits biscuits en forme de fleur, croûte croustillante et cœur fondant à l'amande. Sans lactose. Vendus par 4.",
+    "ingredients": "Amandes, sucre, œufs bio",
+    "price": 5.0,
+    "image": "images/products/massepains.jpg",
+    "stock": true
+  }
+]

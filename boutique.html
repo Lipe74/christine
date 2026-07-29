@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boutique – Le Sans Gluten de Christine</title>
-<meta name="description" content="Commandez en ligne les pains, pâtisseries et produits sans gluten de Christine. Livraison en Belgique.">
+<meta name="description" content="Commandez en ligne les cookies, sablés et biscuits sans gluten de Christine. Livraison en Belgique.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <meta name="theme-color" content="#d97a3f">
@@ -67,6 +67,7 @@ nav { position: sticky; top: 0; z-index: 999; background: var(--white); border-b
 .product-cat { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--color-dark); }
 .product-name { font-size: 16px; font-weight: 800; color: var(--dark); line-height: 1.3; }
 .product-desc { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; }
+.product-ingredients { font-size: 10.5px; color: var(--muted); line-height: 1.5; background: var(--color-light); padding: 6px 8px; border-radius: 8px; }
 .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
 .product-price { font-size: 18px; font-weight: 900; color: var(--color-main); }
 .stock-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
@@ -130,7 +131,7 @@ footer { background: var(--color-light); border-top: 2px solid var(--color-borde
 <!-- HEADER -->
 <div class="shop-header">
   <h1>Notre boutique</h1>
-  <p>Pains, pâtisseries et produits sans gluten, préparés avec soin. Livraison gratuite dès 60 € d'achat.</p>
+  <p>Cookies, sablés et biscuits sans gluten, préparés avec soin. Livraison gratuite dès 60 € d'achat.</p>
 </div>
 
 <!-- FILTERS -->
@@ -200,6 +201,7 @@ function renderProducts() {
         <span class="product-cat">${p.category}</span>
         <div class="product-name">${p.name}</div>
         <p class="product-desc">${p.description}</p>
+        ${p.ingredients ? `<p class="product-ingredients"><strong>Ingrédients :</strong> ${p.ingredients}</p>` : ''}
         <div class="product-footer">
           <span class="product-price">${p.price.toFixed(2)} €</span>
           <span class="stock-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'En stock' : 'Rupture de stock'}</span>
