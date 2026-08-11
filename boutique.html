@@ -200,14 +200,24 @@ footer { background: var(--color-light); border-top: 2px solid var(--color-borde
   <div class="footer-copy">© 2026 Le Sans Gluten de Christine · Tous droits réservés</div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-init.js"></script>
 <script src="js/cart.js"></script>
 <script>
 let ALL_PRODUCTS = [];
 let ACTIVE_CATEGORY = "Tous";
 
 async function loadProducts() {
-  const res = await fetch("data/products.json");
-  ALL_PRODUCTS = await res.json();
+  const grid = document.getElementById("shop-grid");
+  try {
+    const snap = await PRODUITS_COLLECTION.orderBy("ordre", "asc").get();
+    ALL_PRODUCTS = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Erreur de chargement des produits :", err);
+    grid.innerHTML = '<p style="text-align:center; color:var(--muted); padding:40px 0;">Impossible de charger les produits pour le moment. Merci de réessayer plus tard.</p>';
+    return;
+  }
   renderFilters();
   renderProducts();
 }
@@ -232,23 +242,27 @@ function renderProducts() {
 
   grid.innerHTML = list.map(p => `
     <div class="product-card">
-      <img class="product-img" src="${p.image}" alt="${p.name}" onerror="this.src='images/placeholder-product.svg'" onclick="openLightbox('${p.image}', '${p.name.replace(/'/g, "\\'")}')">
+      <img class="product-img" src="${p.image}" alt="${escapeAttr(p.name)}" onerror="this.src='images/placeholder-product.svg'" onclick="openLightbox('${escapeAttr(p.image)}', '${escapeAttr(p.name)}')">
       <div class="product-body">
         <span class="product-cat">${p.category}</span>
         <div class="product-name">${p.name}</div>
         <p class="product-desc" id="desc-${p.id}">${p.description}</p>
-        <button class="read-more-btn" onclick="toggleDesc(${p.id})" id="toggle-${p.id}">Lire la suite</button>
+        <button class="read-more-btn" onclick="toggleDesc('${p.id}')" id="toggle-${p.id}">Lire la suite</button>
         ${p.ingredients ? `<p class="product-ingredients"><strong>Ingrédients :</strong> ${p.ingredients}</p>` : ''}
         <div class="product-footer">
-          <span class="product-price">${p.price.toFixed(2)} €</span>
+          <span class="product-price">${Number(p.price).toFixed(2)} €</span>
           <span class="stock-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'En stock' : 'Rupture de stock'}</span>
         </div>
-        <button class="btn-add" ${p.stock ? '' : 'disabled'} onclick="addToCartById(${p.id})">
+        <button class="btn-add" ${p.stock ? '' : 'disabled'} onclick="addToCartById('${p.id}')">
           ${p.stock ? '🛒 Ajouter au panier' : 'Indisponible'}
         </button>
       </div>
     </div>
   `).join("");
+}
+
+function escapeAttr(str) {
+  return String(str || "").replace(/'/g, "&#39;").replace(/"/g, "&quot;");
 }
 
 function toggleDesc(id) {

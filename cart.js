@@ -105,12 +105,12 @@ function renderCart() {
         <div class="cart-row-name">${item.name}</div>
         <div class="cart-row-price">${item.price.toFixed(2)} €</div>
         <div class="cart-row-qty">
-          <button onclick="changeQty(${item.id}, -1)" aria-label="Diminuer">−</button>
+          <button onclick="changeQty('${item.id}', -1)" aria-label="Diminuer">−</button>
           <span>${item.qty}</span>
-          <button onclick="changeQty(${item.id}, 1)" aria-label="Augmenter">+</button>
+          <button onclick="changeQty('${item.id}', 1)" aria-label="Augmenter">+</button>
         </div>
       </div>
-      <button class="cart-row-remove" onclick="removeFromCart(${item.id})" aria-label="Supprimer">✕</button>
+      <button class="cart-row-remove" onclick="removeFromCart('${item.id}')" aria-label="Supprimer">✕</button>
     `;
     list.appendChild(row);
   });

@@ -229,48 +229,21 @@ footer { background: var(--color-light); border-top: 2px solid var(--color-borde
 
 <div class="divider"></div>
 
-<!-- AVIS – Exemples à remplacer par les vrais avis de Christine -->
+<!-- AVIS – Alimentés dynamiquement depuis Firestore (gérés depuis admin.html) -->
 <div class="section bg-white" id="avis">
   <div class="section-inner">
     <div class="section-label">Avis Clients</div>
     <h2 class="section-title">Ce qu'ils disent de nous</h2>
-    <div class="rating-bar">
-      <div class="rating-score">5.0</div>
+    <div class="rating-bar" id="rating-bar" style="display:none;">
+      <div class="rating-score" id="rating-score">5.0</div>
       <div class="rating-info">
-        <div class="stars">★★★★★</div>
+        <div class="stars" id="rating-stars">★★★★★</div>
         <div class="rtxt">Excellent</div>
-        <small>sur Google Reviews</small>
+        <small id="rating-count">sur Google Reviews</small>
       </div>
     </div>
-    <div class="reviews-grid">
-
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar">AB</div>
-          <div><div class="review-name">Prénom Nom</div><div class="review-stars">★★★★★</div></div>
-          <div class="review-date">Mai 2026</div>
-        </div>
-        <p class="review-text">"Exemple d'avis à remplacer par un vrai témoignage client."</p>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar">CD</div>
-          <div><div class="review-name">Prénom Nom</div><div class="review-stars">★★★★★</div></div>
-          <div class="review-date">Avr. 2026</div>
-        </div>
-        <p class="review-text">"Exemple d'avis à remplacer par un vrai témoignage client."</p>
-      </div>
-
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar">EF</div>
-          <div><div class="review-name">Prénom Nom</div><div class="review-stars">★★★★★</div></div>
-          <div class="review-date">Mars 2026</div>
-        </div>
-        <p class="review-text">"Exemple d'avis à remplacer par un vrai témoignage client."</p>
-      </div>
-
+    <div class="reviews-grid" id="reviews-grid">
+      <p style="text-align:center; color:var(--muted); grid-column:1/-1;">Chargement des avis…</p>
     </div>
     <!-- Remplacer PLACE_ID par l'ID Google Maps de Christine -->
     <a href="https://search.google.com/local/reviews?placeid=PLACE_ID" target="_blank" class="btn-more">Voir tous les avis Google ↗</a>
@@ -331,6 +304,9 @@ footer { background: var(--color-light); border-top: 2px solid var(--color-borde
   </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore-compat.js"></script>
+<script src="js/firebase-init.js"></script>
 <script>
 function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
@@ -340,6 +316,57 @@ function handleSubmit(e, successId) {
   fetch(e.target.action, { method:'POST', body:new FormData(e.target), headers:{'Accept':'application/json'} })
     .then(r => { if(r.ok) { e.target.reset(); document.getElementById(successId).style.display='block'; } });
 }
+
+function escapeHtml(str) {
+  return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+function initials(name) {
+  return String(name || "?").trim().split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+}
+
+function formatReviewDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("fr-BE", { month: "short", year: "numeric" });
+}
+
+async function loadReviews() {
+  const grid = document.getElementById("reviews-grid");
+  try {
+    const snap = await AVIS_COLLECTION.orderBy("date", "desc").limit(6).get();
+    if (snap.empty) {
+      grid.innerHTML = '<p style="text-align:center; color:var(--muted); grid-column:1/-1;">Les premiers avis arrivent bientôt !</p>';
+      return;
+    }
+    const reviews = snap.docs.map(doc => doc.data());
+    grid.innerHTML = "";
+    reviews.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+      card.innerHTML = `
+        <div class="review-header">
+          <div class="review-avatar">${escapeHtml(initials(r.name))}</div>
+          <div><div class="review-name">${escapeHtml(r.name)}</div><div class="review-stars">${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}</div></div>
+          <div class="review-date">${formatReviewDate(r.date)}</div>
+        </div>
+        <p class="review-text">"${escapeHtml(r.text)}"</p>
+      `;
+      grid.appendChild(card);
+    });
+
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    document.getElementById("rating-score").textContent = avg.toFixed(1);
+    document.getElementById("rating-stars").textContent = "★★★★★".slice(0, Math.round(avg)) + "☆☆☆☆☆".slice(0, 5 - Math.round(avg));
+    document.getElementById("rating-count").textContent = `${reviews.length} avis sur Google`;
+    document.getElementById("rating-bar").style.display = "flex";
+  } catch (err) {
+    console.error("Erreur de chargement des avis :", err);
+    grid.innerHTML = "";
+  }
+}
+
+loadReviews();
 </script>
 </body>
 </html>

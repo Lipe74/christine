@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – Le Sans Gluten de Christine</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="images/logo.png">
+
+<style>
+:root {
+  --color-main: #d97a3f;
+  --color-dark: #a85423;
+  --color-light: #fbf0e6;
+  --color-border: #f0d5bc;
+  --dark: #0f172a;
+  --muted: #64748b;
+  --white: #ffffff;
+  --bg: #f8fafc;
+  --radius: 16px;
+  --max: 1000px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --danger: #dc2626;
+  --success: #16a34a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+img { max-width: 100%; display: block; }
+button { font-family: 'Nunito', sans-serif; cursor: pointer; }
+
+/* LOGIN */
+.login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-main) 100%); }
+.login-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 30px; width: 100%; max-width: 380px; text-align: center; }
+.login-card img { width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 16px; object-fit: cover; }
+.login-card h1 { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+.login-card p { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+.login-card input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--color-border); border-radius: 10px; font-size: 14px; margin-bottom: 12px; background: var(--bg); outline: none; }
+.login-card input:focus { border-color: var(--color-main); background: white; }
+.login-card button { width: 100%; padding: 13px; background: var(--color-main); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 800; margin-top: 6px; }
+.login-card button:hover { background: var(--color-dark); }
+.login-error { display: none; font-size: 12px; color: var(--danger); background: #fee2e2; padding: 8px 10px; border-radius: 8px; margin-top: 12px; }
+
+/* DASHBOARD */
+.dashboard { display: none; }
+.admin-nav { background: var(--white); border-bottom: 3px solid var(--color-main); box-shadow: 0 2px 16px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100; }
+.admin-nav-inner { max-width: var(--max); margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.admin-title { font-size: 16px; font-weight: 900; color: var(--color-main); }
+.logout-btn { background: none; border: 1.5px solid var(--color-border); color: var(--muted); padding: 8px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+.tabs { max-width: var(--max); margin: 20px auto 0; padding: 0 20px; display: flex; gap: 8px; }
+.tab-btn { border: 1.5px solid var(--color-border); background: var(--white); color: var(--dark); font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 20px; }
+.tab-btn.active { background: var(--color-main); color: white; border-color: var(--color-main); }
+.tab-panel { display: none; max-width: var(--max); margin: 20px auto 60px; padding: 0 20px; }
+.tab-panel.active { display: block; }
+
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.panel-header h2 { font-size: 20px; font-weight: 900; }
+.btn-primary { background: var(--color-main); color: white; border: none; padding: 11px 18px; border-radius: 10px; font-size: 13px; font-weight: 800; }
+.btn-primary:hover { background: var(--color-dark); }
+.btn-secondary { background: var(--white); color: var(--dark); border: 1.5px solid var(--color-border); padding: 11px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.btn-secondary:hover { border-color: var(--color-main); color: var(--color-main); }
+
+/* FORM CARD (produit / avis) */
+.form-card { background: var(--white); border: 1.5px solid var(--color-border); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); margin-bottom: 24px; display: none; }
+.form-card.open { display: block; }
+.form-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1.5px solid var(--color-border); border-radius: 9px; font-family: 'Nunito', sans-serif; font-size: 13.5px; background: var(--bg); outline: none; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--color-main); background: white; }
+.form-group textarea { resize: vertical; min-height: 70px; }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-check { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.form-check input { width: auto; }
+.form-actions { display: flex; gap: 10px; margin-top: 4px; }
+.img-preview { width: 90px; height: 90px; object-fit: contain; background: var(--color-light); border-radius: 10px; margin-bottom: 8px; border: 1.5px solid var(--color-border); }
+.upload-progress { font-size: 12px; color: var(--color-main); font-weight: 700; margin-top: 6px; display: none; }
+
+/* LISTES */
+.item-list { display: grid; gap: 12px; }
+.item-row { background: var(--white); border: 1.5px solid var(--color-border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 14px; }
+.item-thumb { width: 52px; height: 52px; border-radius: 10px; object-fit: contain; background: var(--color-light); flex-shrink: 0; border: 1px solid var(--color-border); }
+.item-info { flex: 1; min-width: 0; }
+.item-title { font-size: 14px; font-weight: 800; }
+.item-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.item-badge { font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 20px; }
+.item-badge.in { background: #dcfce7; color: #166534; }
+.item-badge.out { background: #fee2e2; color: #991b1b; }
+.item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.icon-btn { width: 34px; height: 34px; border-radius: 8px; border: 1.5px solid var(--color-border); background: var(--white); font-size: 14px; display: flex; align-items: center; justify-content: center; }
+.icon-btn:hover { border-color: var(--color-main); }
+.icon-btn.delete:hover { border-color: var(--danger); background: #fee2e2; }
+.empty-state { text-align: center; color: var(--muted); font-size: 13px; padding: 40px 0; }
+.review-stars-input { display: flex; gap: 4px; font-size: 24px; }
+.review-stars-input span { cursor: pointer; color: #d1d5db; }
+.review-stars-input span.active { color: #f59e0b; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--dark); color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-card">
+    <img src="images/logo.png" alt="Le Sans Gluten de Christine">
+    <h1>Espace admin</h1>
+    <p>Le Sans Gluten de Christine</p>
+    <input type="email" id="login-email" placeholder="Email" autocomplete="username">
+    <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
+    <button onclick="doLogin()">Se connecter</button>
+    <div class="login-error" id="login-error">Email ou mot de passe incorrect.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <nav class="admin-nav">
+    <div class="admin-nav-inner">
+      <span class="admin-title">🔧 Admin – Le Sans Gluten de Christine</span>
+      <button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-btn-produits" onclick="switchTab('produits')">🍪 Produits</button>
+    <button class="tab-btn" id="tab-btn-avis" onclick="switchTab('avis')">⭐ Avis Google</button>
+  </div>
+
+  <!-- PANEL PRODUITS -->
+  <div class="tab-panel active" id="panel-produits">
+    <div class="panel-header">
+      <h2>Produits</h2>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn-secondary" id="import-btn" onclick="importFromJson()">📥 Importer products.json</button>
+        <button class="btn-primary" onclick="openProductForm()">+ Nouveau produit</button>
+      </div>
+    </div>
+
+    <div class="form-card" id="product-form-card">
+      <h3 id="product-form-title">Nouveau produit</h3>
+      <input type="hidden" id="product-edit-id">
+      <div class="form-group">
+        <label>Photo</label>
+        <img class="img-preview" id="product-img-preview" src="images/placeholder-product.svg" alt="">
+        <input type="file" id="product-photo" accept="image/*" onchange="previewProductPhoto(event)">
+        <div class="upload-progress" id="upload-progress">Envoi de la photo…</div>
+      </div>
+      <div class="form-group"><label>Nom du produit *</label><input type="text" id="product-name" placeholder="Ex : Sablés au beurre sans gluten"></div>
+      <div class="form-row-2">
+        <div class="form-group"><label>Catégorie *</label><input type="text" id="product-category" placeholder="Ex : Biscuits"></div>
+        <div class="form-group"><label>Prix (€) *</label><input type="number" id="product-price" step="0.10" min="0" placeholder="5.00"></div>
+      </div>
+      <div class="form-group"><label>Description *</label><textarea id="product-description" placeholder="Description du produit"></textarea></div>
+      <div class="form-group"><label>Ingrédients (optionnel)</label><textarea id="product-ingredients" placeholder="Ex : Farine de riz, beurre, sucre..."></textarea></div>
+      <div class="form-check"><input type="checkbox" id="product-stock" checked><label for="product-stock">En stock</label></div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="saveProduct()">💾 Enregistrer</button>
+        <button class="btn-secondary" onclick="closeProductForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="item-list" id="products-list">
+      <div class="empty-state">Chargement des produits…</div>
+    </div>
+  </div>
+
+  <!-- PANEL AVIS -->
+  <div class="tab-panel" id="panel-avis">
+    <div class="panel-header">
+      <h2>Avis Google</h2>
+      <button class="btn-primary" onclick="openReviewForm()">+ Nouvel avis</button>
+    </div>
+
+    <div class="form-card" id="review-form-card">
+      <h3 id="review-form-title">Nouvel avis</h3>
+      <input type="hidden" id="review-edit-id">
+      <div class="form-row-2">
+        <div class="form-group"><label>Nom du client *</label><input type="text" id="review-name" placeholder="Ex : Marie D."></div>
+        <div class="form-group"><label>Date *</label><input type="date" id="review-date"></div>
+      </div>
+      <div class="form-group">
+        <label>Note *</label>
+        <div class="review-stars-input" id="review-stars-input">
+          <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
+        </div>
+        <input type="hidden" id="review-rating" value="5">
+      </div>
+      <div class="form-group"><label>Texte de l'avis *</label><textarea id="review-text" placeholder="Témoignage du client"></textarea></div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="saveReview()">💾 Enregistrer</button>
+        <button class="btn-secondary" onclick="closeReviewForm()">Annuler</button>
+      </div>
+    </div>
+
+    <div class="item-list" id="reviews-list">
+      <div class="empty-state">Chargement des avis…</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.11.0/firebase-storage-compat.js"></script>
+<script src="js/firebase-init.js"></script>
+
+<script>
+/* ============================================
+   AUTH
+   ============================================ */
+function doLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const password = document.getElementById("login-password").value;
+  const errorBox = document.getElementById("login-error");
+  errorBox.style.display = "none";
+
+  auth.signInWithEmailAndPassword(email, password).catch(() => {
+    errorBox.style.display = "block";
+  });
+}
+
+function doLogout() {
+  auth.signOut();
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    loadProducts();
+    loadReviews();
+  } else {
+    document.getElementById("login-screen").style.display = "flex";
+    document.getElementById("dashboard").style.display = "none";
+  }
+});
+
+/* ============================================
+   UI HELPERS
+   ============================================ */
+function switchTab(tab) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("tab-btn-" + tab).classList.add("active");
+  document.getElementById("panel-" + tab).classList.add("active");
+}
+
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+/* ============================================
+   PRODUITS
+   ============================================ */
+let productPhotoFile = null;
+let currentProductImageUrl = "";
+
+function openProductForm() {
+  document.getElementById("product-form-title").textContent = "Nouveau produit";
+  document.getElementById("product-edit-id").value = "";
+  document.getElementById("product-name").value = "";
+  document.getElementById("product-category").value = "";
+  document.getElementById("product-price").value = "";
+  document.getElementById("product-description").value = "";
+  document.getElementById("product-ingredients").value = "";
+  document.getElementById("product-stock").checked = true;
+  document.getElementById("product-img-preview").src = "images/placeholder-product.svg";
+  document.getElementById("product-photo").value = "";
+  productPhotoFile = null;
+  currentProductImageUrl = "";
+  document.getElementById("product-form-card").classList.add("open");
+  document.getElementById("product-form-card").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function closeProductForm() {
+  document.getElementById("product-form-card").classList.remove("open");
+}
+
+function previewProductPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  productPhotoFile = file;
+  document.getElementById("product-img-preview").src = URL.createObjectURL(file);
+}
+
+function editProduct(id, p) {
+  document.getElementById("product-form-title").textContent = "Modifier le produit";
+  document.getElementById("product-edit-id").value = id;
+  document.getElementById("product-name").value = p.name || "";
+  document.getElementById("product-category").value = p.category || "";
+  document.getElementById("product-price").value = p.price || "";
+  document.getElementById("product-description").value = p.description || "";
+  document.getElementById("product-ingredients").value = p.ingredients || "";
+  document.getElementById("product-stock").checked = !!p.stock;
+  document.getElementById("product-img-preview").src = p.image || "images/placeholder-product.svg";
+  document.getElementById("product-photo").value = "";
+  productPhotoFile = null;
+  currentProductImageUrl = p.image || "";
+  document.getElementById("product-form-card").classList.add("open");
+  document.getElementById("product-form-card").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function saveProduct() {
+  const name = document.getElementById("product-name").value.trim();
+  const category = document.getElementById("product-category").value.trim();
+  const price = parseFloat(document.getElementById("product-price").value);
+  const description = document.getElementById("product-description").value.trim();
+  const ingredients = document.getElementById("product-ingredients").value.trim();
+  const stock = document.getElementById("product-stock").checked;
+  const editId = document.getElementById("product-edit-id").value;
+
+  if (!name || !category || !description || isNaN(price)) {
+    showToast("⚠️ Merci de remplir tous les champs obligatoires (*)");
+    return;
+  }
+
+  let imageUrl = currentProductImageUrl;
+
+  try {
+    if (productPhotoFile) {
+      const progress = document.getElementById("upload-progress");
+      progress.style.display = "block";
+      const path = `christine/produits/${Date.now()}_${productPhotoFile.name}`;
+      const ref = storage.ref(path);
+      await ref.put(productPhotoFile);
+      imageUrl = await ref.getDownloadURL();
+      progress.style.display = "none";
+    }
+
+    const data = {
+      name, category, price, description, ingredients, stock,
+      image: imageUrl || "images/placeholder-product.svg"
+    };
+
+    if (editId) {
+      await PRODUITS_COLLECTION.doc(editId).update(data);
+      showToast("✅ Produit mis à jour");
+    } else {
+      data.ordre = Date.now();
+      await PRODUITS_COLLECTION.add(data);
+      showToast("✅ Produit ajouté");
+    }
+
+    closeProductForm();
+    loadProducts();
+  } catch (err) {
+    console.error(err);
+    showToast("❌ Erreur : " + err.message);
+  }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Supprimer le produit "${name}" ? Cette action est irréversible.`)) return;
+  try {
+    await PRODUITS_COLLECTION.doc(id).delete();
+    showToast("🗑️ Produit supprimé");
+    loadProducts();
+  } catch (err) {
+    showToast("❌ Erreur : " + err.message);
+  }
+}
+
+let CURRENT_PRODUCTS = {};
+
+async function loadProducts() {
+  const list = document.getElementById("products-list");
+  try {
+    const snap = await PRODUITS_COLLECTION.orderBy("ordre", "asc").get();
+    CURRENT_PRODUCTS = {};
+    if (snap.empty) {
+      list.innerHTML = '<div class="empty-state">Aucun produit pour le moment. Utilisez "Importer products.json" ou "+ Nouveau produit".</div>';
+      return;
+    }
+    list.innerHTML = "";
+    snap.forEach(doc => {
+      const p = doc.data();
+      CURRENT_PRODUCTS[doc.id] = p;
+      const row = document.createElement("div");
+      row.className = "item-row";
+      row.innerHTML = `
+        <img class="item-thumb" src="${p.image || 'images/placeholder-product.svg'}" alt="">
+        <div class="item-info">
+          <div class="item-title"></div>
+          <div class="item-sub">${p.category} · ${Number(p.price).toFixed(2)} € · <span class="item-badge ${p.stock ? 'in' : 'out'}">${p.stock ? 'En stock' : 'Rupture'}</span></div>
+        </div>
+        <div class="item-actions">
+          <button class="icon-btn" data-action="edit" data-id="${doc.id}">✏️</button>
+          <button class="icon-btn delete" data-action="delete" data-id="${doc.id}">🗑️</button>
+        </div>
+      `;
+      row.querySelector(".item-title").textContent = p.name;
+      row.querySelector('[data-action="edit"]').addEventListener("click", () => editProduct(doc.id, CURRENT_PRODUCTS[doc.id]));
+      row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteProduct(doc.id, CURRENT_PRODUCTS[doc.id].name));
+      list.appendChild(row);
+    });
+  } catch (err) {
+    list.innerHTML = `<div class="empty-state">❌ Erreur de chargement : ${err.message}</div>`;
+  }
+}
+
+async function importFromJson() {
+  if (!confirm("Importer les produits de products.json vers Firestore ?\n\nÀ utiliser une seule fois. Les produits déjà présents dans Firestore avec le même ID seront écrasés.")) return;
+  const btn = document.getElementById("import-btn");
+  btn.disabled = true;
+  btn.textContent = "Import en cours…";
+  try {
+    const res = await fetch("data/products.json");
+    const products = await res.json();
+    const batch = db.batch();
+    products.forEach(p => {
+      const ref = PRODUITS_COLLECTION.doc(String(p.id));
+      batch.set(ref, {
+        name: p.name,
+        category: p.category,
+        description: p.description,
+        ingredients: p.ingredients || "",
+        price: p.price,
+        stock: p.stock,
+        image: p.image,
+        ordre: p.id
+      });
+    });
+    await batch.commit();
+    showToast(`✅ ${products.length} produits importés`);
+    loadProducts();
+  } catch (err) {
+    showToast("❌ Erreur d'import : " + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "📥 Importer products.json";
+  }
+}
+
+/* ============================================
+   AVIS GOOGLE
+   ============================================ */
+document.querySelectorAll("#review-stars-input span").forEach(star => {
+  star.addEventListener("click", () => setStars(parseInt(star.dataset.val)));
+});
+
+function setStars(val) {
+  document.getElementById("review-rating").value = val;
+  document.querySelectorAll("#review-stars-input span").forEach(s => {
+    s.classList.toggle("active", parseInt(s.dataset.val) <= val);
+  });
+}
+
+function openReviewForm() {
+  document.getElementById("review-form-title").textContent = "Nouvel avis";
+  document.getElementById("review-edit-id").value = "";
+  document.getElementById("review-name").value = "";
+  document.getElementById("review-date").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("review-text").value = "";
+  setStars(5);
+  document.getElementById("review-form-card").classList.add("open");
+  document.getElementById("review-form-card").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function closeReviewForm() {
+  document.getElementById("review-form-card").classList.remove("open");
+}
+
+function editReview(id, r) {
+  document.getElementById("review-form-title").textContent = "Modifier l'avis";
+  document.getElementById("review-edit-id").value = id;
+  document.getElementById("review-name").value = r.name || "";
+  document.getElementById("review-date").value = r.date || "";
+  document.getElementById("review-text").value = r.text || "";
+  setStars(r.rating || 5);
+  document.getElementById("review-form-card").classList.add("open");
+  document.getElementById("review-form-card").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+async function saveReview() {
+  const name = document.getElementById("review-name").value.trim();
+  const date = document.getElementById("review-date").value;
+  const rating = parseInt(document.getElementById("review-rating").value);
+  const text = document.getElementById("review-text").value.trim();
+  const editId = document.getElementById("review-edit-id").value;
+
+  if (!name || !date || !text) {
+    showToast("⚠️ Merci de remplir tous les champs obligatoires (*)");
+    return;
+  }
+
+  try {
+    const data = { name, date, rating, text };
+    if (editId) {
+      await AVIS_COLLECTION.doc(editId).update(data);
+      showToast("✅ Avis mis à jour");
+    } else {
+      await AVIS_COLLECTION.add(data);
+      showToast("✅ Avis ajouté");
+    }
+    closeReviewForm();
+    loadReviews();
+  } catch (err) {
+    showToast("❌ Erreur : " + err.message);
+  }
+}
+
+async function deleteReview(id, name) {
+  if (!confirm(`Supprimer l'avis de "${name}" ?`)) return;
+  try {
+    await AVIS_COLLECTION.doc(id).delete();
+    showToast("🗑️ Avis supprimé");
+    loadReviews();
+  } catch (err) {
+    showToast("❌ Erreur : " + err.message);
+  }
+}
+
+let CURRENT_REVIEWS = {};
+
+async function loadReviews() {
+  const list = document.getElementById("reviews-list");
+  try {
+    const snap = await AVIS_COLLECTION.orderBy("date", "desc").get();
+    CURRENT_REVIEWS = {};
+    if (snap.empty) {
+      list.innerHTML = '<div class="empty-state">Aucun avis pour le moment. Cliquez sur "+ Nouvel avis".</div>';
+      return;
+    }
+    list.innerHTML = "";
+    snap.forEach(doc => {
+      const r = doc.data();
+      CURRENT_REVIEWS[doc.id] = r;
+      const row = document.createElement("div");
+      row.className = "item-row";
+      row.innerHTML = `
+        <div class="item-info">
+          <div class="item-title"></div>
+          <div class="item-sub"></div>
+        </div>
+        <div class="item-actions">
+          <button class="icon-btn" data-action="edit" data-id="${doc.id}">✏️</button>
+          <button class="icon-btn delete" data-action="delete" data-id="${doc.id}">🗑️</button>
+        </div>
+      `;
+      row.querySelector(".item-title").textContent = `${r.name} — ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}`;
+      row.querySelector(".item-sub").textContent = `${formatDate(r.date)} — "${r.text.length > 80 ? r.text.slice(0, 80) + '…' : r.text}"`;
+      row.querySelector('[data-action="edit"]').addEventListener("click", () => editReview(doc.id, CURRENT_REVIEWS[doc.id]));
+      row.querySelector('[data-action="delete"]').addEventListener("click", () => deleteReview(doc.id, CURRENT_REVIEWS[doc.id].name));
+      list.appendChild(row);
+    });
+  } catch (err) {
+    list.innerHTML = `<div class="empty-state">❌ Erreur de chargement : ${err.message}</div>`;
+  }
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("fr-BE", { year: "numeric", month: "long" });
+}
+</script>
+</body>
+</html>
