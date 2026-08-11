@@ -62,7 +62,7 @@ nav { position: sticky; top: 0; z-index: 999; background: var(--white); border-b
 .shop-grid { max-width: var(--max); margin: 0 auto; padding: 28px 20px 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
 .product-card { background: var(--white); border: 1.5px solid var(--color-border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
 .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
-.product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--color-light); }
+.product-img { width: 100%; aspect-ratio: 4/3; object-fit: contain; background: var(--color-light); padding: 8px; }
 .product-body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .product-cat { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--color-dark); }
 .product-name { font-size: 16px; font-weight: 800; color: var(--dark); line-height: 1.3; }
