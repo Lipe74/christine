@@ -17,8 +17,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-const auth = firebase.auth();
-const storage = firebase.storage();
+const auth = (typeof firebase.auth === "function") ? firebase.auth() : null;
+const storage = (typeof firebase.storage === "function") ? firebase.storage() : null;
 
 // Chemins Firestore dédiés à Christine (namespace, même logique que lylou_vely)
 const PRODUITS_COLLECTION = db.collection("christine").doc("produits").collection("items");
